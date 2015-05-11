@@ -1,9 +1,21 @@
 import cv2
 import numpy
+from optparse import OptionParser
 import random
 from seeds import s
 
-random.seed(0)
+parser = OptionParser()
+parser.add_option('-s', '--seed', dest='seed',
+    help='seed for random number generator. Useful for reproducing interesting designs')
+
+options, args = parser.parse_args()
+
+if options.seed is not None:
+    try:
+        seed_value = int(options.seed)
+    except ValueError:
+        seed_value = options.seed
+    random.seed(seed_value)
 
 XNODES = 16
 YNODES = 20
