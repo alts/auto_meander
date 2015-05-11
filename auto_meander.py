@@ -7,7 +7,6 @@ random.seed(0)
 
 XNODES = 16
 YNODES = 20
-GUTTER = 5
 
 cell_grid = s.generate((YNODES, XNODES))
 
@@ -149,12 +148,6 @@ def create_screen(cell_grid, shape):
     assignment_mask[:-1, 1:] = scaled_right_lines
     canvas[assignment_mask == 1] = 0
 
-    # add a blank region around canvas
-    #sy, sx = canvas.shape
-    #grown_canvas = numpy.ones((sy + 6, sx + 6))
-    #grown_canvas[3:-3,3:-3] = canvas
-    #canvas = grown_canvas
-
     return canvas
 
 def print_onto(canvas, screen, alpha):
@@ -168,11 +161,9 @@ def create_print(design):
     w += 1
     h += 1
 
-    x_gutter = w // 4
-    y_gutter = h // 4
-
-    canvas = numpy.ones((h, w, 3), dtype=numpy.float64) * (numpy.array([211, 228, 244]) / 256.0)
+    canvas_color = numpy.array([211, 228, 244]) / 256.0
     primary_color = numpy.array([192, 180, 48]) / 256.0
+    canvas = numpy.ones((h, w, 3), dtype=numpy.float64) * canvas_color
 
     # print out window
     screen = numpy.ones((h, w, 3)) * primary_color
@@ -199,6 +190,15 @@ def create_print(design):
     # and finally, the design screen is rotated 180 degrees
     screen = numpy.rot90(screen, 2)
     canvas = print_onto(canvas, screen, 0.3)
+
+    # add a blank region around canvas
+    sy, sx, sd = canvas.shape
+    x_buffer = sx // 4
+    y_buffer = sy // 4
+    padding = min(x_buffer, y_buffer)
+    grown_canvas = numpy.ones((sy + padding*2, sx + padding*2, sd), dtype=numpy.float64) * canvas_color
+    grown_canvas[padding:-padding,padding:-padding] = canvas
+    canvas = grown_canvas
 
     # scale canvas
     SCALE_FACTOR = 7
