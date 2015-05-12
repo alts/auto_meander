@@ -12,6 +12,7 @@ parser.add_option('-s', '--size', dest='size', default='15x19',
 
 options, args = parser.parse_args()
 
+# translate and validate command line options
 if options.seed is not None:
     try:
         seed_value = int(options.seed)
@@ -19,9 +20,22 @@ if options.seed is not None:
         seed_value = options.seed
     random.seed(seed_value)
 
-XNODES = 15
-YNODES = 19
-grid_shape = (YNODES + 1, XNODES + 1)
+dimensions = options.size.split('x')
+if len(dimensions) != 2:
+    print 'the "size" argument must be in the form WIDTHxHEIGHT, e.g. 15x19'
+    exit(1)
+
+try:
+    x_cells, y_cells = map(int, dimensions)
+except ValueError:
+    print 'the "size" argument must use numbers, e.g. 15x19'
+    exit(1)
+
+if x_cells % 2 == 0 or y_cells % 2 == 0:
+    print 'both dimensions in "size" must be odd numbers'
+    exit(1)
+
+grid_shape = (y_cells + 1, x_cells + 1)
 
 cell_grid = s.generate(grid_shape)
 
