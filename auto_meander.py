@@ -11,6 +11,8 @@ parser.add_option('-r', '--seed', dest='seed',
     help='seed for random number generator. Useful for reproducing interesting designs')
 parser.add_option('-s', '--size', dest='size', default='15x19',
     help='dimensions, in grid units, for the design screen in the form "WIDTHxHEIGHT"')
+parser.add_option('-m', '--mode', dest='mode', default='save',
+    help='either "save" (default) or "show". If "show",  images will be displayed one by one in a popup')
 
 options, args = parser.parse_args()
 
@@ -51,5 +53,16 @@ for i in xrange(LIMIT):
 
 screen = printing.create_screen(cell_grid, grid_shape)
 
-cv2.imshow('meander', printing.create_print(screen))
-cv2.waitKey()
+if options.mode == 'show':
+    cv2.imshow('meander', printing.create_print(screen))
+    cv2.waitKey()
+else:
+    try:
+        os.mkdir('out')
+    except OSError:
+        pass
+
+    cv2.imwrite(
+        'out/{0}_{1}.png'.format(seed_value, options.size),
+        (printing.create_print(screen) * 255).astype(numpy.uint8)
+    )
