@@ -2,6 +2,7 @@ import auto_meander.hamiltonian_cycle as hamiltonian_cycle
 import auto_meander.printing as printing
 import cv2
 import numpy
+import os
 from optparse import OptionParser
 import random
 
@@ -19,6 +20,8 @@ if options.seed is not None:
     except ValueError:
         seed_value = options.seed
     random.seed(seed_value)
+else:
+    seed_value = hash(os.urandom(8))
 
 dimensions = options.size.split('x')
 if len(dimensions) != 2:
