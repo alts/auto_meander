@@ -39,8 +39,6 @@ grid_shape = (y_cells + 1, x_cells + 1)
 
 cell_grid = s.generate(grid_shape)
 
-WHOLE_GRID_FF_MASK = numpy.zeros([v + 2 for v in cell_grid.shape], dtype=numpy.uint8)
-
 def shift_down(grid):
     shifted = numpy.roll(grid, 1, axis=0)
     shifted[0,:] = 0
@@ -232,8 +230,6 @@ def create_print(design):
     # scale canvas
     SCALE_FACTOR = 7
     return numpy.kron(canvas, numpy.ones((SCALE_FACTOR, SCALE_FACTOR, 1)))
-
-cumulative = None
 
 LIMIT = 15000
 
