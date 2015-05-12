@@ -5,8 +5,10 @@ import random
 from seeds import s
 
 parser = OptionParser()
-parser.add_option('-s', '--seed', dest='seed',
+parser.add_option('-r', '--seed', dest='seed',
     help='seed for random number generator. Useful for reproducing interesting designs')
+parser.add_option('-s', '--size', dest='size', default='15x19',
+    help='dimensions, in grid units, for the design screen in the form "WIDTHxHEIGHT"')
 
 options, args = parser.parse_args()
 
@@ -17,10 +19,11 @@ if options.seed is not None:
         seed_value = options.seed
     random.seed(seed_value)
 
-XNODES = 16
-YNODES = 20
+XNODES = 15
+YNODES = 19
+grid_shape = (YNODES + 1, XNODES + 1)
 
-cell_grid = s.generate((YNODES, XNODES))
+cell_grid = s.generate(grid_shape)
 
 WHOLE_GRID_FF_MASK = numpy.zeros([v + 2 for v in cell_grid.shape], dtype=numpy.uint8)
 
@@ -120,8 +123,8 @@ def create_screen(cell_grid, shape):
     canvas = numpy.ones((2 * sy - 1, 2 * sx - 1))
 
     # draw vertices
-    for gx in xrange(XNODES):
-        for gy in xrange(YNODES):
+    for gx in xrange(sx):
+        for gy in xrange(sy):
             canvas[gy * 2, gx * 2] = 0
 
     assignment_mask = numpy.zeros(canvas.shape)
@@ -225,7 +228,7 @@ for i in xrange(LIMIT):
         print '{0} / {1} generations'.format(i, LIMIT)
     cell_grid = mutate(cell_grid)
 
-screen = create_screen(cell_grid, (YNODES, XNODES))
+screen = create_screen(cell_grid, grid_shape)
 
 cv2.imshow('meander', create_print(screen))
 cv2.waitKey()
