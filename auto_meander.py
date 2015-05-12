@@ -71,8 +71,12 @@ for image_i in xrange(num_images):
 
     screen = printing.create_screen(cell_grid, grid_shape)
 
+    primary_color = numpy.array(
+        [random.randint(40, 200), random.randint(40, 200), random.randint(40, 200)]
+    ) / 256.0
+
     if options.mode == 'show':
-        cv2.imshow('meander', printing.create_print(screen))
+        cv2.imshow('meander', printing.create_print(screen, primary_color))
         cv2.waitKey()
     else:
         try:
@@ -82,5 +86,5 @@ for image_i in xrange(num_images):
 
         cv2.imwrite(
             'out/{0}_{1}.png'.format(seed_value, options.size),
-            (printing.create_print(screen) * 255).astype(numpy.uint8)
+            (printing.create_print(screen, primary_color) * 255).astype(numpy.uint8)
         )

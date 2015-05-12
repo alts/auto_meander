@@ -54,7 +54,7 @@ def print_onto(canvas, screen, alpha):
     return canvas * screen * alpha + (1 - alpha) * canvas
 
 
-def create_print(design):
+def create_print(design, primary_color):
     h, w = design.shape
 
     # the window into which all of the lines will be printed is one unit larger
@@ -63,7 +63,6 @@ def create_print(design):
     h += 1
 
     canvas_color = numpy.array([211, 228, 244]) / 256.0
-    primary_color = numpy.array([192, 180, 48]) / 256.0
     canvas = numpy.ones((h, w, 3), dtype=numpy.float64) * canvas_color
 
     # print out window
