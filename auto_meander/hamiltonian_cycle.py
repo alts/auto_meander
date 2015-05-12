@@ -3,18 +3,18 @@ from grid_ops import shift_up, shift_right, shift_down, shift_left
 import numpy
 import random
 
+_INDEX_CACHE = {}
 
 def pick_candidate(candidates):
     y, x = candidates.shape
-    num_candidates = numpy.sum(candidates)
-    choice_index = random.randint(1, num_candidates) - 1
-    skipped_candidates = 0
-    for yi in xrange(y):
-        for xi in xrange(x):
-            if candidates[yi, xi] == True:
-                if skipped_candidates == choice_index:
-                    return yi, xi
-                skipped_candidates += 1
+
+    if (y, x) not in _INDEX_CACHE:
+        _INDEX_CACHE[y, x] = numpy.array(range(x * y)).reshape(candidates.shape)
+    indexes = _INDEX_CACHE[y, x]
+
+    choices = indexes[candidates == 1]
+    index = choices[random.randint(0, choices.size - 1)]
+    return index // x, index % x
 
 
 def make_starting_cycle(shape):
