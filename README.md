@@ -15,3 +15,6 @@ Running the code requires Poetry and Python 3.8+
 ```
 poetry install
 poetry run ./auto_meander.py
+```
+
+This will generate PNG image files in the `out` directory.
