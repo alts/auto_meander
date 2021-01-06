@@ -1,5 +1,5 @@
 import cv2
-from grid_ops import shift_up, shift_right, shift_down, shift_left
+from .grid_ops import shift_up, shift_right, shift_down, shift_left
 import numpy
 import random
 
@@ -28,7 +28,7 @@ def make_starting_cycle(shape):
     """
     y, x = shape
     cell_grid = numpy.zeros((y - 1, x - 1))
-    for yi in xrange(y - 1):
+    for yi in range(y - 1):
         if yi % 2 == 0:
             cell_grid[yi,:] = 1
         elif (yi // 2) % 2 == 0:

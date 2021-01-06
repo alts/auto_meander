@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import auto_meander.hamiltonian_cycle as hamiltonian_cycle
 import auto_meander.printing as printing
 import cv2
@@ -31,17 +33,17 @@ else:
 # check size option
 dimensions = options.size.split('x')
 if len(dimensions) != 2:
-    print 'the "size" argument must be in the form WIDTHxHEIGHT, e.g. 15x19'
+    print( 'the "size" argument must be in the form WIDTHxHEIGHT, e.g. 15x19')
     exit(1)
 
 try:
     x_cells, y_cells = map(int, dimensions)
 except ValueError:
-    print 'the "size" argument must use numbers, e.g. 15x19'
+    print( 'the "size" argument must use numbers, e.g. 15x19')
     exit(1)
 
 if x_cells % 2 == 0 or y_cells % 2 == 0:
-    print 'both dimensions in "size" must be odd numbers'
+    print('both dimensions in "size" must be odd numbers')
     exit(1)
 
 grid_shape = (y_cells + 1, x_cells + 1)
@@ -50,13 +52,13 @@ grid_shape = (y_cells + 1, x_cells + 1)
 try:
     num_images = int(options.number)
 except ValueError:
-    print 'the "number" argument has to be a number, e.g. 5'
+    print( 'the "number" argument has to be a number, e.g. 5')
     exit(1)
 
 LIMIT = 15000
 
-for image_i in xrange(num_images):
-    print 'generating image {0} of {1}...'.format(image_i + 1, num_images)
+for image_i in range(num_images):
+    print('generating image {0} of {1}...'.format(image_i + 1, num_images))
 
     if image_i > 0:
         seed_value = hash(os.urandom(8))
@@ -64,9 +66,9 @@ for image_i in xrange(num_images):
 
     cell_grid = hamiltonian_cycle.make_starting_cycle(grid_shape)
 
-    for i in xrange(LIMIT):
+    for i in range(LIMIT):
         if i % 1000 == 0:
-            print '\t{0} / {1} generations'.format(i, LIMIT)
+            print ('\t{0} / {1} generations'.format(i, LIMIT))
         cell_grid = hamiltonian_cycle.mutate(cell_grid)
 
     screen = printing.create_screen(cell_grid, grid_shape)

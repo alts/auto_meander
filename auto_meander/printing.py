@@ -1,4 +1,4 @@
-from grid_ops import shift_up, shift_right, shift_down, shift_left
+from .grid_ops import shift_up, shift_right, shift_down, shift_left
 import numpy
 
 
@@ -7,8 +7,8 @@ def create_screen(cell_grid, shape):
     canvas = numpy.ones((2 * sy - 1, 2 * sx - 1))
 
     # draw vertices
-    for gx in xrange(sx):
-        for gy in xrange(sy):
+    for gx in range(sx):
+        for gy in range(sy):
             canvas[gy * 2, gx * 2] = 0
 
     assignment_mask = numpy.zeros(canvas.shape)
