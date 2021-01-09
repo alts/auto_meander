@@ -7,6 +7,34 @@ import numpy
 import os
 from optparse import OptionParser
 import random
+import svgwrite
+
+
+def write_svg(file_name, screen):
+    dwg = svgwrite.Drawing(
+        file_name, ("210mm", "297mm"), profile="tiny", viewBox="0 0 210 297"
+    )
+    points = []
+    to_process = set()
+    for y, row in enumerate(screen):
+        for x, cell in enumerate(row):
+            if cell <= 0:
+                to_process.add((x, y))
+
+    point = list(sorted(to_process))[0]
+    while to_process:
+        x, y = point
+        points.append((x*2, y*2))
+        to_process.remove(point)
+        for next_point in ((x+1, y), (x, y+1), (x-1, y), (x, y-1)):
+            if next_point in to_process:
+                point = next_point
+                break
+    d = "M " + " ".join([f"{x} {y}" for x, y in points]) + " Z"
+    path = dwg.path(d=d, stroke="black", stroke_width=0.2, fill="none")
+    dwg.add(path)
+    dwg.save()
+
 
 parser = OptionParser()
 parser.add_option('-r', '--seed', dest='seed',
@@ -86,7 +114,8 @@ for image_i in range(num_images):
         except OSError:
             pass
 
-        cv2.imwrite(
-            'out/{0}_{1}.png'.format(seed_value, options.size),
+        base_name = f'out/{seed_value}_{options.size}'
+        write_svg(f"{base_name}.svg", screen)
+        cv2.imwrite(f"{base_name}.png",
             (printing.create_print(screen, primary_color) * 255).astype(numpy.uint8)
         )
