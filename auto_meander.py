@@ -11,6 +11,7 @@ import svgwrite
 
 
 def write_svg(file_name, screen):
+    # A4 paper
     dwg = svgwrite.Drawing(
         file_name, ("210mm", "297mm"), profile="tiny", viewBox="0 0 210 297"
     )
@@ -24,6 +25,7 @@ def write_svg(file_name, screen):
     point = list(sorted(to_process))[0]
     while to_process:
         x, y = point
+        # 2 mm width and height
         points.append((x*2, y*2))
         to_process.remove(point)
         for next_point in ((x+1, y), (x, y+1), (x-1, y), (x, y-1)):

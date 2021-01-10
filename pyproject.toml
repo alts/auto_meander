@@ -5,7 +5,7 @@ description = ""
 authors = ["Henning Jacobs <henning@jacobs1.de>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 opencv-python = "^4.5.1"
 svgwrite = "^1.4"
 
